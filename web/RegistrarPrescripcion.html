@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <link rel="icon" href="https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/hospital.png">
+    
+    <title> ARANGO - Registro de Prescripciones</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4>Registro de Prescripciones</h4>
+                    </div>
+       
+                    <div class="card-body">
+                        <!-- Formulario que envía los datos al servlet -->
+                        <form id="prescripcionForm" action="RegistrarPrescripcion" method="post" onsubmit="return validarFormulario()">
+                            
+                            <div class="form-group">
+                                <label for="DPI">DPI</label>
+                                <input type="text" class="form-control" id="DPI" name="DPI" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="MEDICAMENTOID">ID del Medicamento</label>
+                                <input type="text" class="form-control" id="MEDICAMENTOID" name="MEDICAMENTOID" required>
+                            </div>
+                             <div class="form-group">
+                                <label for="CANTIDAD">Cantidad</label>
+                                <input type="text" class="form-control" id="CANTIDAD" name="CANTIDAD" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Registrar Prescripción</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        $(document).ready(function() {
+            $('#prescripcionForm').submit(function(event) {
+                event.preventDefault(); // Evitar envío del formulario por defecto
+                var form = $(this);
+                var formData = form.serialize(); // Obtener datos del formulario
+                // Enviar solicitud AJAX al servlet
+                $.ajax({
+                    type: 'POST',
+                    url: 'RegistrarPrescripcion', // URL del servlet
+                    data: formData,
+                    success: function(response) {
+                        // Mostrar SweetAlert con el mensaje de éxito
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Registro exitoso',
+                            text: 'La prescripción se ha registrado correctamente.',
+                            onClose: function() {
+                                // Redirigir a página principal u otra página
+                                window.location.href = "RegistrarPrescripcion.html";
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        // Mostrar SweetAlert con mensaje de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Hubo un error al registrar la prescripción.'
+                        });
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+
+        function validarFormulario() {
+            // Lógica de validación del formulario (si es necesario)
+            
+            // Ejemplo de alerta de error
+            // Esta alerta se mostrará si el formulario se envía sin completar todos los campos requeridos
+            var DPI = document.getElementById("DPI").value;
+            var MEDICAMENTOID = document.getElementById("MEDICAMENTOID").value;
+            var CANTIDAD = document.getElementById("CANTIDAD").value;
+
+            // Verificar si los campos requeridos están vacíos
+            if (DPI === "" || MEDICAMENTOID === "" || CANTIDAD === "") {
+                alert("Por favor, complete todos los campos requeridos");
+                return false; // Detener el envío del formulario
+            }
+            
+            // Aquí puedes agregar más lógica de validación según tus necesidades
+            
+            return true; // Permitir el envío del formulario si pasa todas las validaciones
+        }
+    </script>
+</body>
+</html>

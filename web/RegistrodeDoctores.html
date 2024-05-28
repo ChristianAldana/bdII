@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/256x256/hospital.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Doctores</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- SweetAlert2 CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Registro de Doctores</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Formulario que envía los datos al servlet -->
+                    <form id="doctorForm">
+                        <div class="form-group">
+                            <label for="DOCTORID">ID de Doctor:</label>
+                            <input type="text" class="form-control" id="DOCTORID" name="DOCTORID">
+                        </div>
+                        <div class="form-group">
+                            <label for="NOMBRE">Nombre:</label>
+                            <input type="text" class="form-control" id="NOMBRE" name="NOMBRE">
+                        </div>
+                        <div class="form-group">
+                            <label for="ESPECIALIDADID">ID de Especialidad:</label>
+                            <input type="text" class="form-control" id="ESPECIALIDADID" name="ESPECIALIDADID">
+                        </div>
+                        <button type="submit" class="btn btn-primary bi bi-check">Registrar Doctor</button>
+                        <button onclick="window.location.href='vistadoctores.html'" type="button" class="btn btn-secondary bi bi-arrow-return-left">Regresar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    $(document).ready(function() {
+        $('#doctorForm').submit(function(event) {
+            event.preventDefault(); // Evitar envío del formulario por defecto
+            var form = $(this);
+            var formData = form.serialize(); // Obtener datos del formulario
+            // Enviar solicitud AJAX al servlet
+            $.ajax({
+                type: 'POST',
+                url: 'RegistrarDoctorServlet', // URL del servlet
+                data: formData,
+                success: function(response) {
+                    // Mostrar SweetAlert con el mensaje de éxito
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: '¡Registro exitoso!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // Manejar errores si es necesario
+                    console.error(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Hubo un error al registrar el doctor.'
+                    });
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
